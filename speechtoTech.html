@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech to Text</title>
+</head>
+<body>
+  <h1>Speech to Text Example</h1>
+  <label for="Select language">Select Language</label>
+  <select name="" id="language-Select">
+    <option value="en-US">English</option>
+    <option value="hi-IN">Hindi</option>
+  </select>
+
+  <button id="start-btn">Start</button> <button id="stop-btn">Stop</button>
+  <textarea id="textbox" rows="10" cols="50" placeholder="Your speech will appear here..."></textarea>
+
+ <script>
+  const sr= window.SpeechRecognition || window.webkitSpeechRecognition
+  const languageSelected=document.querySelector("#language-Select")
+  let speckval= new sr()
+  speckval.continuous=true
+  speckval.interimResults=true
+ console.log(speckval)
+
+  document.querySelector("#start-btn").addEventListener('click',function(e){
+    e.preventDefault()
+    speckval.lang=`${languageSelected.value}`
+    speckval.start()
+
+    speckval.onresult=res=>{
+      let text=Array.from(res.results).map(re=> re[0]).map(ress=> ress.transcript)
+      document.querySelector("#textbox").innerText=text.toString()
+    }
+  })
+
+  document.querySelector("#stop-btn").addEventListener('click',function(){
+    speckval.stop()
+  })
+ </script>
+</body>
+</html>
